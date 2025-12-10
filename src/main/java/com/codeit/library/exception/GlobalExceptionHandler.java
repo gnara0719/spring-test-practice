@@ -7,6 +7,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.UnsupportedMediaTypeStatusException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -63,6 +64,12 @@ public class GlobalExceptionHandler {
         String message = fieldError != null ? fieldError.getDefaultMessage() : "입력값이 올바르지 않습니다";
         ErrorResponse error = new ErrorResponse("VALIDATION_ERROR", message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
+    @ExceptionHandler(UnsupportedMediaTypeStatusException.class)
+    public ResponseEntity<ErrorResponse> handleException(UnsupportedMediaTypeStatusException e) {
+        ErrorResponse error = new ErrorResponse("UNSUPPORTED_MEDIA_TYPE_ERROR", "서버 오류가 발생했습니다");
+        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(error);
     }
 
     @ExceptionHandler(Exception.class)
