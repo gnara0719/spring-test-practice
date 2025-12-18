@@ -35,7 +35,7 @@ services: # 실행할 여러 컨테이너들을 정의
     volumes:
       - my-postgres-data:/var/lib/postgresql/data
     healthcheck: # 컨테이너가 정상인지 주기적으로 확인
-      test: ["CMD-SHELL", "pg_isready _U postgres -d postgres"] # 헬스 체크를 위해 실행할 명령어
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"] # 헬스 체크를 위해 실행할 명령어
       interval: 10s # 컨테이너 체크
       timeout: 5s # 5초 안에 응답 없으면 unhealthy
       retries: 5 # 5번 실패하면 unhealthy 상태로 판정
