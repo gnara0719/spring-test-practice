@@ -1,12 +1,17 @@
 package com.codeit.library.controller;
 
+import com.codeit.library.domain.Member;
 import com.codeit.library.dto.request.MemberCreateRequest;
 import com.codeit.library.dto.response.MemberResponse;
+import com.codeit.library.exception.DuplicateEmailException;
+import com.codeit.library.repository.MemberRepository;
 import com.codeit.library.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
@@ -17,10 +22,13 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
-    @PostMapping
-    public ResponseEntity<MemberResponse> createMember(@Valid @RequestBody MemberCreateRequest request) {
-        MemberResponse response = memberService.createMember(request);
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<MemberResponse> createMember(
+            @Valid @RequestPart("request") MemberCreateRequest request,
+            @RequestPart("file") MultipartFile file) {
+        MemberResponse response = memberService.createMember(request, file);
         return ResponseEntity
             .created(URI.create("/api/members/" + response.getId()))
             .body(response);
