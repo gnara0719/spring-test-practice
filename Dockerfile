@@ -28,7 +28,7 @@ FROM eclipse-temurin:17-jre-alpine
 COPY --from=build /app/build/libs/*.jar app.jar
 
 #타임존 설정
-ENV TZ = Asia/Seoul
+ENV TZ=Asia/Seoul
 RUN apk add --no-cache tzdata
 
 #이 컨테이너가 시작될 때 무조건 실행해야 하는 명령어
